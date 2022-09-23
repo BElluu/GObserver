@@ -1,0 +1,26 @@
+{
+ "Servers": [
+  {
+   "Id": 4,
+   "Name": "Test",
+   "IpAddress": "192.123.111.12",
+   "Online": false,
+   "LastTimeOnline": "2022-09-23T18:31:08.473525452+02:00",
+   "Tags": [
+    "Quadro",
+    "Vivo"
+   ]
+  },
+  {
+   "Id": 4,
+   "Name": "Test",
+   "IpAddress": "192.123.111.12",
+   "Online": false,
+   "LastTimeOnline": "2022-09-23T18:31:08.473525452+02:00",
+   "Tags": [
+    "Quadro",
+    "Vivo"
+   ]
+  }
+ ]
+}

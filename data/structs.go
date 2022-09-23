@@ -1,7 +1,5 @@
 package data
 
-import "time"
-
 type Servers struct {
 	Servers []ServerDetails
 }
@@ -11,11 +9,11 @@ type Servers struct {
 // }
 
 type ServerDetails struct {
-	Id             int
+	Id             string
 	Name           string
 	IpAddress      string
 	Online         bool
-	LastTimeOnline time.Time
+	LastTimeOnline string
 	Tags           []string
 }
 
