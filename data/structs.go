@@ -1,12 +1,8 @@
 package data
 
 type Servers struct {
-	Servers []ServerDetails
+	Server []ServerDetails
 }
-
-// type ServerItem struct {
-// 	Server ServerDetails
-// }
 
 type ServerDetails struct {
 	Id             string
@@ -18,7 +14,3 @@ type ServerDetails struct {
 }
 
 var MyServers = Servers{}
-
-// func (s *Servers) SrvItems() []ServerItem {
-// 	return s.Items
-// }

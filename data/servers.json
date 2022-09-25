@@ -1,13 +1,26 @@
 [
-Servers {
-Servers  "Id": "0cf2f8cd",
-Servers  "Name": "Test",
-Servers  "IpAddress": "192.123.111.12",
-Servers  "Online": false,
-Servers  "LastTimeOnline": "23-09-2022 18:09:40",
-Servers  "Tags": [
-Servers   "Quadro",
-Servers   "Vivo"
-Servers  ]
-Servers }
-Servers]
+ {
+  "Id": "20fdeaf7",
+  "Name": "serwerownia02",
+  "IpAddress": "32.165.22.16",
+  "Online": false,
+  "LastTimeOnline": "25-09-2022 19:09:21",
+  "Tags": [
+   "Selfhosted",
+   "Warsaw",
+   "Victory"
+  ]
+ },
+ {
+  "Id": "acdb5077",
+  "Name": "serwerownia01",
+  "IpAddress": "32.165.22.11",
+  "Online": false,
+  "LastTimeOnline": "25-09-2022 19:09:34",
+  "Tags": [
+   "Selfhosted",
+   "Warsaw",
+   "Victory"
+  ]
+ }
+]

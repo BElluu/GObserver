@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"crypto/rand"
 	"encoding/hex"
 	"github.com/tatsushid/go-fastping"
-	"math/rand"
 	"net"
 	"time"
 )
