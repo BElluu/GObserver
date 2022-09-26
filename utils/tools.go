@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"github.com/tatsushid/go-fastping"
 	"net"
 	"time"
@@ -23,13 +24,17 @@ func PingTarget(ipAddress string) bool {
 	if err != nil {
 		return false
 	}
-	p.MaxRTT = 10
+	//p.MaxRTT = 10000
 
 	p.AddIPAddr(ra)
 	found := false
 
 	p.OnRecv = func(addr *net.IPAddr, rtt time.Duration) {
 		found = true
+	}
+
+	p.OnIdle = func() {
+		fmt.Println("finish")
 	}
 
 	err = p.Run()

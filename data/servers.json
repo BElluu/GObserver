@@ -1,1 +1,10 @@
-[]
+[
+ {
+  "Id": "a8080d20",
+  "Name": "srv01",
+  "IpAddress": "15.163.163.55",
+  "Online": false,
+  "LastTimeOnline": "26-09-2022 22:09:42",
+  "Tags": null
+ }
+]

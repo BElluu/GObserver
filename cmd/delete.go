@@ -25,8 +25,8 @@ var deleteCmd = &cobra.Command{
 	},
 }
 
-func deleteServer(idServer string) {
-	elementToDelete := &data.ServerDetails{Id: idServer}
+func deleteServer(record string) {
+	elementToDelete := &data.ServerDetails{Id: record, IpAddress: record, Name: record}
 
 	_, _ = json.Marshal(elementToDelete)
 	file, _ := ioutil.ReadFile("/home/bartek/Programming/GObserver/data/servers.json")
@@ -38,7 +38,7 @@ func deleteServer(idServer string) {
 
 	length := len(fields)
 	for index, field := range fields {
-		if field["Id"] == elementToDelete.Id {
+		if field["Id"] == elementToDelete.Id || field["IpAddress"] == elementToDelete.IpAddress || field["Name"] == elementToDelete.Name {
 			if index == length-1 {
 				fields = fields[0:index]
 			} else {

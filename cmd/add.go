@@ -28,6 +28,7 @@ var addCmd = &cobra.Command{
 
 func addServer(name, ipAddress string, tags ...string) {
 	var tagSlice []string
+	var dataServers = data.MyServers.Server
 
 	for _, tag := range tags {
 		tagSlice = append(tagSlice, tag)
@@ -38,24 +39,40 @@ func addServer(name, ipAddress string, tags ...string) {
 		log.Fatal("Something went wrong...")
 	}
 
+	onlineStatus := utils.PingTarget(ipAddress)
+
 	newServer := data.ServerDetails{
 		Id:             slug,
 		Name:           name,
 		IpAddress:      ipAddress,
-		Online:         false, //TODO true if server is pinged before add
+		Online:         onlineStatus, //TODO true if server is pinged before add
 		LastTimeOnline: time.Now().Format("02-01-2006 15:01:05"),
 		Tags:           tagSlice,
 	}
 
 	file, _ := ioutil.ReadFile("/home/bartek/Programming/GObserver/data/servers.json")
 	if len(file) != 0 {
-		err := json.Unmarshal(file, &data.MyServers.Server)
+		err := json.Unmarshal(file, &dataServers)
 		if err != nil {
 			return
 		}
+
+		var xs []map[string]interface{}
+		err = json.Unmarshal(file, &xs)
+		if err != nil {
+			return
+		}
+		for _, field := range xs {
+			if field["Name"] == name {
+				log.Fatalf("Server with %s exists", name)
+			}
+			if field["IpAddress"] == ipAddress {
+				log.Fatalf("Server with %s exists", ipAddress)
+			}
+		}
 	}
 
-	data.MyServers.Server = append(data.MyServers.Server, newServer)
+	data.MyServers.Server = append(dataServers, newServer)
 	dataBytes, _ := json.MarshalIndent(data.MyServers.Server, "", " ")
 	_ = ioutil.WriteFile("/home/bartek/Programming/GObserver/data/servers.json", dataBytes, 0644)
 }
