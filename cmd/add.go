@@ -45,7 +45,7 @@ func addServer(name, ipAddress string, tags ...string) {
 		Id:             slug,
 		Name:           name,
 		IpAddress:      ipAddress,
-		Online:         onlineStatus, //TODO true if server is pinged before add
+		Online:         onlineStatus,
 		LastTimeOnline: time.Now().Format("02-01-2006 15:01:05"),
 		Tags:           tagSlice,
 	}
