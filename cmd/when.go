@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
-
 	"github.com/spf13/cobra"
+	"gobserver/data"
+	"io/ioutil"
 )
 
 func init() {
@@ -15,6 +17,24 @@ var whenCmd = &cobra.Command{
 	Short: "Get information when last time server was online",
 	Long:  "Get information when last time server was online",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Host: ABC. Was online 22.01.2022 13:51:11")
+		whenWasOnline(args[0])
 	},
+}
+
+func whenWasOnline(server string) {
+	checkServer := &data.ServerDetails{Id: server, IpAddress: server, Name: server}
+	file, _ := ioutil.ReadFile("/home/bartek/Programming/GObserver/data/servers.json")
+
+	var xs []map[string]interface{}
+	err := json.Unmarshal(file, &xs)
+	if err != nil {
+		return
+	}
+	for _, field := range xs {
+		if field["Name"] == checkServer.Name || field["IpAddress"] == checkServer.IpAddress || field["Id"] == checkServer.Id {
+			fmt.Printf("Server was online last time at %s\n", field["LastTimeOnline"])
+			return
+		}
+	}
+	fmt.Printf("Server %s not exists\n", server)
 }

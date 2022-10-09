@@ -1,26 +1,16 @@
 package data
 
-import "time"
-
 type Servers struct {
-	Servers []ServerDetails
+	Server []ServerDetails
 }
 
-// type ServerItem struct {
-// 	Server ServerDetails
-// }
-
 type ServerDetails struct {
-	Id             int
+	Id             string
 	Name           string
 	IpAddress      string
 	Online         bool
-	LastTimeOnline time.Time
+	LastTimeOnline string
 	Tags           []string
 }
 
 var MyServers = Servers{}
-
-// func (s *Servers) SrvItems() []ServerItem {
-// 	return s.Items
-// }

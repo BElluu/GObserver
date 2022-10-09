@@ -1,26 +1,42 @@
-{
- "Servers": [
-  {
-   "Id": 4,
-   "Name": "Testowya12",
-   "IpAddress": "192.168.0.2",
-   "Online": true,
-   "LastTimeOnline": "2022-09-23T14:50:36.375288+02:00",
-   "Tags": [
-    "asb",
-    "aaaa"
-   ]
-  },
-  {
-   "Id": 4,
-   "Name": "Testowya12",
-   "IpAddress": "192.168.0.2",
-   "Online": true,
-   "LastTimeOnline": "2022-09-23T14:50:36.375288+02:00",
-   "Tags": [
-    "asb",
-    "aaaa"
-   ]
-  }
- ]
-}
+[
+ {
+  "Id": "c6e6ef1f",
+  "Name": "serwerek01",
+  "IpAddress": "172.217.16.35",
+  "Online": true,
+  "LastTimeOnline": "27-09-2022 20:09:20",
+  "Tags": null
+ },
+ {
+  "Id": "600492cb",
+  "Name": "serwerek02",
+  "IpAddress": "10.10.10.10",
+  "Online": false,
+  "LastTimeOnline": "27-09-2022 20:09:08",
+  "Tags": null
+ },
+ {
+  "Id": "2947094c",
+  "Name": "serwerek03",
+  "IpAddress": "10.10.10.11",
+  "Online": false,
+  "LastTimeOnline": "27-09-2022 20:09:44",
+  "Tags": null
+ },
+ {
+  "Id": "325e8558",
+  "Name": "serwerek04",
+  "IpAddress": "10.10.10.12",
+  "Online": false,
+  "LastTimeOnline": "27-09-2022 20:09:56",
+  "Tags": null
+ },
+ {
+  "Id": "3a974efb",
+  "Name": "mikrus",
+  "IpAddress": "srv08.mikr.us",
+  "Online": true,
+  "LastTimeOnline": "27-09-2022 21:09:48",
+  "Tags": null
+ }
+]
