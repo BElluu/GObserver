@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -33,7 +34,8 @@ var connectCmd = &cobra.Command{
 
 func sshConnection(user, server, port string) error {
 	srv := &data.ServerDetails{Id: server, IpAddress: server, Name: server}
-	file, _ := ioutil.ReadFile("/home/bartek/Programming/GObserver/data/servers.json")
+	absPath, _ := filepath.Abs("data/servers.json")
+	file, _ := ioutil.ReadFile(absPath)
 
 	var xs []map[string]interface{}
 	err := json.Unmarshal(file, &xs)

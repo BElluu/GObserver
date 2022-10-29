@@ -15,6 +15,6 @@ var tagCmd = &cobra.Command{
 	Short: "Add or delete tags from your servers",
 	Long:  "Add or delete tags from your servers",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Tagi")
+		fmt.Println("Not implemented yet...")
 	},
 }

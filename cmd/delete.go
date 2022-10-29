@@ -6,6 +6,7 @@ import (
 	"gobserver/data"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -29,7 +30,8 @@ func deleteServer(record string) {
 	elementToDelete := &data.ServerDetails{Id: record, IpAddress: record, Name: record}
 
 	_, _ = json.Marshal(elementToDelete)
-	file, _ := ioutil.ReadFile("/home/bartek/Programming/GObserver/data/servers.json")
+	absPath, _ := filepath.Abs("data/servers.json")
+	file, _ := ioutil.ReadFile(absPath)
 	fields := make([]map[string]interface{}, 0)
 	err := json.Unmarshal(file, &fields)
 	if err != nil {
@@ -48,5 +50,5 @@ func deleteServer(record string) {
 	}
 
 	out, _ := json.MarshalIndent(fields, "", "  ")
-	_ = ioutil.WriteFile("/home/bartek/Programming/GObserver/data/servers.json", out, 0644)
+	_ = ioutil.WriteFile(absPath, out, 0644)
 }
