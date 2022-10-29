@@ -2,12 +2,17 @@ package cmd
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"gobserver/data"
 	"gobserver/utils"
 	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -15,27 +20,83 @@ func init() {
 	rootCmd.AddCommand(addCmd)
 }
 
+type promptContent struct {
+	errorMsg        string
+	label           string
+	validEmptyValue bool
+}
+
 var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add server to your collection",
-	Long:  "Add server to your collection. You can use tags to group your servers.",
-	Args:  cobra.MinimumNArgs(2),
+	Long:  "Add server to your collection.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Adding server to your collection")
-		addServer(args[0], args[1], args[2:]...)
+		addServer()
 	},
 }
 
-func addServer(name, ipAddress string, tags ...string) {
-	var tagSlice []string
-	var dataServers = data.MyServers.Server
-
-	for _, tag := range tags {
-		tagSlice = append(tagSlice, tag)
+func promptGetInput(pc promptContent) string {
+	validate := func(input string) error {
+		if !pc.validEmptyValue {
+			if len(input) <= 0 {
+				return errors.New(pc.errorMsg)
+			}
+		}
+		return nil
 	}
 
+	templates := &promptui.PromptTemplates{
+		Prompt:  "{{ . }} ",
+		Valid:   "{{ . | green }} ",
+		Invalid: "{{ . | red }} ",
+		Success: "{{ . | bold }} ",
+	}
+
+	prompt := promptui.Prompt{
+		Label:     pc.label,
+		Templates: templates,
+		Validate:  validate,
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		os.Exit(1)
+	}
+	return result
+}
+
+func addServer() {
+
+	nameServerPrompt := promptContent{
+		"Please provide a server name.",
+		"Server name: ",
+		false,
+	}
+	nameServer := promptGetInput(nameServerPrompt)
+
+	ipAddressPrompt := promptContent{
+		"Please provide a ip address.",
+		fmt.Sprintf("Ip address for %s: ", nameServer),
+		false,
+	}
+
+	ipAddress := promptGetInput(ipAddressPrompt)
+
+	tagsPrompt := promptContent{
+		"Something went wrong...",
+		fmt.Sprintf("Tags(separated by a space): "),
+		true,
+	}
+
+	tagsString := promptGetInput(tagsPrompt)
+
+	tags := strings.Split(tagsString, " ")
+
+	var dataServers = data.MyServers.Server
+
 	slug := utils.UniqueSlug()
-	if slug == "" {
+	if len(slug) <= 0 {
 		log.Fatal("Something went wrong...")
 	}
 
@@ -43,14 +104,15 @@ func addServer(name, ipAddress string, tags ...string) {
 
 	newServer := data.ServerDetails{
 		Id:             slug,
-		Name:           name,
+		Name:           nameServer,
 		IpAddress:      ipAddress,
 		Online:         onlineStatus,
 		LastTimeOnline: time.Now().Format("02-01-2006 15:01:05"),
-		Tags:           tagSlice,
+		Tags:           tags,
 	}
 
-	file, _ := ioutil.ReadFile("/home/bartek/Programming/GObserver/data/servers.json")
+	absPath, _ := filepath.Abs("data/servers.json")
+	file, _ := ioutil.ReadFile(absPath)
 	if len(file) != 0 {
 		err := json.Unmarshal(file, &dataServers)
 		if err != nil {
@@ -63,8 +125,8 @@ func addServer(name, ipAddress string, tags ...string) {
 			return
 		}
 		for _, field := range xs {
-			if field["Name"] == name {
-				log.Fatalf("Server with %s exists", name)
+			if field["Name"] == nameServer {
+				log.Fatalf("Server with %s exists", nameServer)
 			}
 			if field["IpAddress"] == ipAddress {
 				log.Fatalf("Server with %s exists", ipAddress)
@@ -74,5 +136,5 @@ func addServer(name, ipAddress string, tags ...string) {
 
 	data.MyServers.Server = append(dataServers, newServer)
 	dataBytes, _ := json.MarshalIndent(data.MyServers.Server, "", " ")
-	_ = ioutil.WriteFile("/home/bartek/Programming/GObserver/data/servers.json", dataBytes, 0644)
+	_ = ioutil.WriteFile(absPath, dataBytes, 0644)
 }

@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"text/tabwriter"
@@ -50,7 +51,8 @@ func showServers() error {
 		if !firstLoad && getLastModifyServers() <= lastModifyTable {
 			continue
 		}
-		file, _ := ioutil.ReadFile("/home/bartek/Programming/GObserver/data/servers.json")
+		absPath, _ := filepath.Abs("data/servers.json")
+		file, _ := ioutil.ReadFile(absPath)
 		servers := data.MyServers.Server
 		err := json.Unmarshal(file, &servers)
 		if err != nil {
@@ -80,7 +82,8 @@ func showServers() error {
 }
 
 func getLastModifyServers() string {
-	file, err := os.Stat("/home/bartek/Programming/GObserver/data/servers.json")
+	absPath, _ := filepath.Abs("data/servers.json")
+	file, err := os.Stat(absPath)
 	if err != nil {
 		fmt.Println(err)
 	}
