@@ -101,13 +101,17 @@ func addServer() {
 	}
 
 	onlineStatus := utils.PingTarget(ipAddress)
+	lastTime := "-------------------"
+	if onlineStatus {
+		lastTime = time.Now().Format("02-01-2006 15:01:05")
+	}
 
 	newServer := data.ServerDetails{
 		Id:             slug,
 		Name:           nameServer,
 		IpAddress:      ipAddress,
 		Online:         onlineStatus,
-		LastTimeOnline: time.Now().Format("02-01-2006 15:01:05"),
+		LastTimeOnline: lastTime,
 		Tags:           tags,
 	}
 

@@ -21,8 +21,8 @@ var deleteCmd = &cobra.Command{
 	Long:  "Delete server from your collection",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Usuwanie servera...")
 		deleteServer(args[0])
+		fmt.Printf("Server %s deleted if exists", args[0])
 	},
 }
 
