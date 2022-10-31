@@ -9,7 +9,9 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"text/tabwriter"
@@ -27,23 +29,36 @@ var watchCmd = &cobra.Command{
 	Short: "Show table with machines",
 	Long:  "Show table with machines. If you use flags, you can filter and sort this table",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := showServers()
+		seconds, _ := strconv.Atoi(args[0])
+		err := showServers(seconds)
 		if err != nil {
 			return
 		}
 	},
 }
 
-func showServers() error {
+func showServers(checkStatusEveryXSeconds int) error {
+
+	if checkStatusEveryXSeconds == 0 {
+		checkStatusEveryXSeconds = 60
+	}
+
+	clear := ""
 	std := os.Stdout
 	format := "%s\t%s\t%s\t%s\t%s\t%s\n"
-	clear := fmt.Sprintf("%c[%dA%c[2K", ESC, 1, ESC)
-	_, _ = fmt.Fprint(std, strings.Repeat(clear, 1000))
+	if checkOSType() == 1 {
+		clear = fmt.Sprintf("%c[%dA%c[2K", ESC, 1, ESC)
+		_, _ = fmt.Fprint(std, strings.Repeat(clear, 1000))
+	} else if checkOSType() == 2 {
+		cmd := exec.Command("cmd", "/c", "cls")
+		cmd.Stdout = std
+		cmd.Run()
+	}
 	writer := tabwriter.NewWriter(std, 10, 1, 5, ' ', 0)
 
 	lastModifyTable := time.Now().Format("2006-01-02 15:04:05")
 	firstLoad := true
-	ticker := time.NewTicker(15 * time.Second)
+	ticker := time.NewTicker(time.Duration(checkStatusEveryXSeconds) * time.Second)
 
 	for {
 		if !firstLoad {
@@ -64,10 +79,13 @@ func showServers() error {
 		if err != nil {
 			return err
 		}
-		//numberOfRecords := len(servers)
 
-		if !firstLoad {
+		if !firstLoad && checkOSType() == 1 {
 			_, _ = fmt.Fprint(std, strings.Repeat(clear, 1000))
+		} else if !firstLoad && checkOSType() == 2 {
+			cmd := exec.Command("cmd", "/c", "cls")
+			cmd.Stdout = os.Stdout
+			cmd.Run()
 		}
 		_, err = fmt.Fprintf(writer, format, "Id", "Name", "Ip Address", "Online", "Last online", "Tags")
 		if err != nil {
@@ -119,4 +137,14 @@ func updateOnlineStatus() {
 	}
 	out, _ := json.MarshalIndent(fields, "", "  ")
 	_ = ioutil.WriteFile(absPath, out, 0644)
+}
+
+func checkOSType() int {
+	switch runtime.GOOS {
+	case "linux":
+		return 1
+	case "windows":
+		return 2
+	}
+	return 1
 }
