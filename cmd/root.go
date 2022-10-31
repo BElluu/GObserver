@@ -12,13 +12,16 @@ var rootCmd = &cobra.Command{
 	Short: "GObserver is tool to monitor machines",
 	Long:  "Simple and fast tool to monitor machines",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("GObserver main commands")
+		cmd.Help()
 	},
 }
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		_, err := fmt.Fprintln(os.Stderr, err)
+		if err != nil {
+			return
+		}
 		os.Exit(1)
 	}
 }
